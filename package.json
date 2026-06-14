@@ -16,6 +16,9 @@
   "scripts": {
     "start": "node index.js",
     "server": "nodemon index.js",
+    "build:css": "tailwindcss -i ./public/css/tailwind.css -o ./public/css/app.css --minify",
+    "build:js": "webpack --mode production",
+    "build": "npm run build:css && npm run build:js",
     "css": "tailwindcss -i ./public/css/tailwind.css -o ./public/css/app.css --watch",
     "js": "webpack --watch",
     "dev": "concurrently -n CSS,JS -c green,blue \"npm run css\" \"npm run js\"",

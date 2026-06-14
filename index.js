@@ -89,14 +89,15 @@ app.use((error, req, res, next) => {
   });
 });
 
-// Definimos el puerto donde se ejecutara el servidor.
-// Primero intentamos leerlo desde .env y si no existe usamos 3000.
-const port = Number(process.env.APP_PORT ?? 3000);
+// Render y otros proveedores asignan el puerto mediante PORT.
+// APP_PORT se conserva para el entorno local del curso.
+const port = Number(process.env.PORT ?? process.env.APP_PORT ?? 3000);
+const host = process.env.NODE_ENV === "production" ? "0.0.0.0" : "localhost";
 
 // Primero comprobamos la base de datos.
 // Despues iniciamos el servidor y lo dejamos escuchando peticiones.
 await conectarDB();
 
-app.listen(port, () => {
-  console.log(`Servidor corriendo en http://localhost:${port}`);
+app.listen(port, host, () => {
+  console.log(`Servidor corriendo en ${host}:${port}`);
 });
