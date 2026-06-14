@@ -1,0 +1,17 @@
+//- Header principal para las paginas privadas de la aplicacion.
+//- Mantiene el logo tipografico BienesRaices sin espacio.
+header(class="sticky top-0 z-50 border-b border-emerald-100 bg-white/95 shadow-[0_10px_30px_rgba(16,185,129,0.14)] backdrop-blur")
+  div(class="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-4 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8")
+    a(class="inline-block text-2xl uppercase tracking-wide text-slate-900" href="/mis-propiedades")
+      strong(class="font-extrabold") Bienes
+      span(class="font-normal text-emerald-700") Raices
+
+    nav(class="flex flex-col gap-2 text-sm font-bold sm:flex-row sm:items-center sm:gap-3")
+      a(class="inline-flex items-center justify-center rounded-full border border-emerald-700 px-4 py-2 text-emerald-700 transition hover:bg-emerald-50 hover:text-emerald-800 focus:outline-none focus:ring-4 focus:ring-emerald-100" href="/mis-propiedades") Mis Propiedades
+      a(class="inline-flex items-center justify-center rounded-full border border-emerald-700 px-4 py-2 text-emerald-700 transition hover:bg-emerald-50 hover:text-emerald-800 focus:outline-none focus:ring-4 focus:ring-emerald-100" href="/#categorias-inicio") Explorar propiedades
+      form(method="POST" action="/auth/logout")
+        input(type="hidden" name="_csrf" value=csrfToken)
+        button(
+          class="inline-flex w-full cursor-pointer items-center justify-center rounded-full border border-slate-300 px-4 py-2 font-bold text-slate-600 transition hover:border-red-300 hover:bg-red-50 hover:text-red-700 focus:outline-none focus:ring-4 focus:ring-red-100 sm:w-auto"
+          type="submit"
+        ) Cerrar sesión

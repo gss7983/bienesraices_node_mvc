@@ -1,0 +1,55 @@
+//- Header del frontend publico. En la vista de una propiedad también puede
+//- recibir al usuario autenticado y mostrar sus acciones de sesión.
+header(class="sticky top-0 z-50 border-b border-emerald-100 bg-white/95 shadow-[0_10px_30px_rgba(16,185,129,0.14)] backdrop-blur")
+  div(class="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8")
+    a(class="inline-block text-2xl uppercase tracking-wide text-slate-900" href="/" aria-label="Ir a la página de inicio")
+      strong(class="font-extrabold") Bienes
+      span(class="font-normal text-emerald-700") Raices
+
+    nav(class="grid grid-cols-2 gap-2 text-sm font-bold sm:flex sm:items-center sm:gap-3")
+      if usuarioAutenticado
+        if esVendedor
+          a(class="inline-flex min-h-10 items-center justify-center rounded-full border border-emerald-700 px-4 py-2 text-center text-emerald-700 transition hover:bg-emerald-50 hover:text-emerald-800 focus:outline-none focus:ring-4 focus:ring-emerald-100" href="/mis-propiedades") Mis propiedades
+        else
+          a(class="inline-flex min-h-10 items-center justify-center rounded-full border border-emerald-700 px-4 py-2 text-center text-emerald-700 transition hover:bg-emerald-50 hover:text-emerald-800 focus:outline-none focus:ring-4 focus:ring-emerald-100" href="/#categorias-inicio") Seguir explorando
+        form(method="POST" action="/auth/logout")
+          input(type="hidden" name="_csrf" value=csrfToken)
+          button(class="inline-flex min-h-10 w-full items-center justify-center rounded-full bg-slate-800 px-4 py-2 text-center text-white transition hover:bg-red-700 focus:outline-none focus:ring-4 focus:ring-red-100 sm:w-auto" type="submit") Cerrar sesión
+      else
+        a(class="inline-flex min-h-10 items-center justify-center rounded-full border border-emerald-700 px-4 py-2 text-center text-emerald-700 transition hover:bg-emerald-50 hover:text-emerald-800 focus:outline-none focus:ring-4 focus:ring-emerald-100" href="/auth/registro") Crear cuenta
+        a(class="inline-flex min-h-10 items-center justify-center rounded-full bg-emerald-700 px-4 py-2 text-center text-white transition hover:bg-emerald-800 focus:outline-none focus:ring-4 focus:ring-emerald-200" href="/auth/login") Iniciar sesión
+
+//- Navegacion de categorias y buscador publico.
+div(class="border-b border-slate-200 bg-white")
+  div(class="mx-auto flex max-w-7xl flex-col gap-3 px-4 py-3 sm:px-6 lg:flex-row lg:items-center lg:px-8")
+    nav(
+      class="flex min-w-0 flex-1 gap-2 overflow-x-auto"
+      aria-label="Categorías de propiedades"
+    )
+      a(href="/categorias/1" class="shrink-0 rounded-full px-4 py-2 text-sm font-semibold text-slate-600 transition hover:bg-emerald-50 hover:text-emerald-700 focus:outline-none focus:ring-4 focus:ring-emerald-100") Casas
+      a(href="/categorias/2" class="shrink-0 rounded-full px-4 py-2 text-sm font-semibold text-slate-600 transition hover:bg-emerald-50 hover:text-emerald-700 focus:outline-none focus:ring-4 focus:ring-emerald-100") Departamentos
+      a(href="/categorias/3" class="shrink-0 rounded-full px-4 py-2 text-sm font-semibold text-slate-600 transition hover:bg-emerald-50 hover:text-emerald-700 focus:outline-none focus:ring-4 focus:ring-emerald-100") Bodegas
+      a(href="/categorias/4" class="shrink-0 rounded-full px-4 py-2 text-sm font-semibold text-slate-600 transition hover:bg-emerald-50 hover:text-emerald-700 focus:outline-none focus:ring-4 focus:ring-emerald-100") Terrenos
+      a(href="/categorias/5" class="shrink-0 rounded-full px-4 py-2 text-sm font-semibold text-slate-600 transition hover:bg-emerald-50 hover:text-emerald-700 focus:outline-none focus:ring-4 focus:ring-emerald-100") Cabañas
+
+    form(
+      action="/buscador"
+      method="GET"
+      class="flex w-full shrink-0 gap-2 lg:w-80"
+      role="search"
+    )
+      label(for="termino" class="sr-only") Buscar propiedades
+      input(
+        type="search"
+        id="termino"
+        name="termino"
+        value=termino || ""
+        placeholder="Título, dirección..."
+        maxlength="100"
+        required
+        class="min-h-10 min-w-0 flex-1 rounded-full border border-slate-300 bg-white px-4 py-2 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-emerald-600 focus:ring-4 focus:ring-emerald-100"
+      )
+      button(
+        type="submit"
+        class="inline-flex min-h-10 shrink-0 cursor-pointer items-center justify-center rounded-full bg-emerald-700 px-4 py-2 text-sm font-bold text-white transition hover:bg-emerald-800 focus:outline-none focus:ring-4 focus:ring-emerald-200"
+      ) Buscar

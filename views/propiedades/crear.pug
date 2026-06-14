@@ -1,0 +1,146 @@
+extends ../layout/admin
+
+block contenido
+  //- Vista inicial para crear una propiedad en el panel privado.
+  section(class="space-y-8")
+    div(class="flex flex-col gap-4 border-b border-slate-200 pb-6 lg:flex-row lg:items-end lg:justify-between")
+      div
+        p(class="text-sm font-semibold uppercase tracking-[0.25em] text-emerald-700") Panel privado
+        h1(class="mt-3 text-3xl font-black text-slate-900 sm:text-4xl")= pagina
+        if esEdicion
+          p(class="mt-3 max-w-2xl text-sm leading-6 text-slate-500") Actualiza la informacion, caracteristicas y ubicacion de esta propiedad.
+        else
+          p(class="mt-3 max-w-2xl text-sm leading-6 text-slate-500") Completa la informacion principal, caracteristicas y ubicacion del inmueble.
+
+      //- Boton secundario de regreso al panel de propiedades.
+      a(class="inline-flex items-center justify-center rounded-full border border-emerald-700 px-6 py-3 text-sm font-black uppercase tracking-wide text-emerald-700 transition hover:border-emerald-800 hover:bg-emerald-50 hover:text-emerald-800 focus:outline-none focus:ring-4 focus:ring-emerald-100" href="/mis-propiedades") Volver
+
+    div(class="mx-auto max-w-4xl overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm")
+      div(class="border-b border-slate-200 px-5 py-4 sm:px-8")
+        h2(class="text-lg font-black text-slate-900") Informacion General
+        p(class="mt-1 text-sm leading-6 text-slate-500") Agrega un titulo claro para que los compradores identifiquen rapidamente la propiedad.
+
+      //- Mostramos errores de validacion enviados desde el controlador.
+      if errores && errores.length
+        div(class="border-b border-red-100 bg-red-50 px-5 py-4 sm:px-8")
+          div(class="space-y-2")
+            each error in errores
+              p(class="rounded-lg border border-red-200 bg-white px-4 py-3 text-sm font-bold text-red-700")= error.msg
+
+      //- El formulario envia los datos al controlador guardar y protege el envio con CSRF.
+      form(class="space-y-8 px-5 py-6 sm:px-8" method="POST" action=action novalidate)
+        input(type="hidden" name="_csrf" value=csrfToken)
+        div(class="space-y-2")
+          label(class="mb-2 block text-sm font-bold text-slate-700" for="titulo") Titulo del Anuncio
+          input#titulo(
+            class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-emerald-600 focus:ring-4 focus:ring-emerald-100"
+            type="text"
+            name="titulo"
+            maxlength="100"
+            placeholder="Titulo Propiedad, ej. Casa en la Playa"
+            value=propiedad ? propiedad.titulo : ""
+          )
+
+        div(class="space-y-2")
+          label(class="mb-2 block text-sm font-bold text-slate-700" for="descripcion") Descripcion
+          textarea#descripcion(
+            class="h-20 w-full resize-none rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-emerald-600 focus:ring-4 focus:ring-emerald-100"
+            name="descripcion"
+            maxlength="500"
+            placeholder="Describe la propiedad, sus espacios, acabados, ubicacion y ventajas principales"
+          )
+            = propiedad ? propiedad.descripcion : ""
+
+        //- Grid responsive: categoria y precio se muestran en dos columnas desde tablet.
+        div(class="grid gap-6 md:grid-cols-2")
+          div(class="space-y-2")
+            label(class="mb-2 block text-sm font-bold text-slate-700" for="categoria") Categoria
+            select#categoria(
+              class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-emerald-600 focus:ring-4 focus:ring-emerald-100"
+              name="categoria"
+            )
+              option(value="") - Seleccione -
+              each categoria in categorias || []
+                option(value=categoria.id selected=(propiedad && Number(propiedad.categoria) === categoria.id))= categoria.nombre
+
+          div(class="space-y-2")
+            label(class="mb-2 block text-sm font-bold text-slate-700" for="precio") Precio
+            select#precio(
+              class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-emerald-600 focus:ring-4 focus:ring-emerald-100"
+              name="precio"
+            )
+              option(value="") - Seleccione -
+              each precio in precios || []
+                option(value=precio.id selected=(propiedad && Number(propiedad.precio) === precio.id))= precio.precio
+
+        //- Grid responsive: estos tres campos quedan en una misma linea desde tablet.
+        div(class="grid gap-6 md:grid-cols-3")
+          div(class="space-y-2")
+            label(class="mb-2 block text-sm font-bold text-slate-700" for="habitaciones") Habitaciones
+            select#habitaciones(
+              class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-emerald-600 focus:ring-4 focus:ring-emerald-100"
+              name="habitaciones"
+            )
+              option(value="") - Seleccione -
+              option(value="0" selected=(propiedad && Number(propiedad.habitaciones) === 0)) 0 - No aplica
+              - let habitaciones = 1;
+              while habitaciones < 6
+                option(value=habitaciones selected=(propiedad && Number(propiedad.habitaciones) === habitaciones))= habitaciones++
+
+          div(class="space-y-2")
+            label(class="mb-2 block text-sm font-bold text-slate-700" for="estacionamiento") Estacionamiento
+            select#estacionamiento(
+              class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-emerald-600 focus:ring-4 focus:ring-emerald-100"
+              name="estacionamiento"
+            )
+              option(value="") - Seleccione -
+              option(value="0" selected=(propiedad && Number(propiedad.estacionamiento) === 0)) 0 - No aplica
+              - let estacionamientos = 1;
+              while estacionamientos < 6
+                option(value=estacionamientos selected=(propiedad && Number(propiedad.estacionamiento) === estacionamientos))= estacionamientos++
+
+          div(class="space-y-2")
+            label(class="mb-2 block text-sm font-bold text-slate-700" for="wc") WC
+            select#wc(
+              class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-emerald-600 focus:ring-4 focus:ring-emerald-100"
+              name="wc"
+            )
+              option(value="") - Seleccione -
+              option(value="0" selected=(propiedad && Number(propiedad.wc) === 0)) 0 - No aplica
+              - let wc = 1;
+              while wc < 6
+                option(value=wc selected=(propiedad && Number(propiedad.wc) === wc))= wc++
+
+        //- Ubicacion: el mapa se controla desde src/js/mapa.js y guarda coordenadas ocultas.
+        div(class="space-y-4 border-t border-slate-100 pt-8")
+          div
+            h3(class="text-lg font-black text-slate-900") Ubicacion
+            p(class="mt-1 text-sm leading-6 text-slate-500") Busca la direccion completa o mueve el pin para ajustar la ubicacion exacta de la propiedad.
+
+          div(class="space-y-2")
+            label(class="mb-2 block text-sm font-bold text-slate-700" for="ubicacion") Direccion completa
+            input#ubicacion(
+              class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-emerald-600 focus:ring-4 focus:ring-emerald-100"
+              type="text"
+              maxlength="255"
+              placeholder="Busca la direccion en el mapa y agrega el numero exterior si hace falta"
+              value=propiedad ? propiedad.calle : ""
+            )
+
+          div#mapa(class="h-96 overflow-hidden rounded-2xl border border-slate-200 shadow-sm")
+
+          //- Estos campos ocultos guardan los datos reales que se enviaran a la base de datos.
+          //- src/js/mapa.js actualiza sus valores al buscar una direccion o mover el pin.
+          input#calle(type="hidden" name="calle" value=propiedad ? propiedad.calle : "")
+          input#lat(type="hidden" name="lat" value=propiedad ? propiedad.lat : "")
+          input#lng(type="hidden" name="lng" value=propiedad ? propiedad.lng : "")
+
+        div(class="flex justify-end border-t border-slate-100 pt-6")
+          button(class="w-full cursor-pointer rounded-full bg-emerald-700 px-6 py-3 text-sm font-black uppercase tracking-wide text-white shadow-sm transition hover:bg-emerald-800 hover:shadow-md focus:outline-none focus:ring-4 focus:ring-emerald-200 sm:w-auto" type="submit")= textoBoton
+
+block styles
+  link(rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css")
+  link(rel="stylesheet" href="https://unpkg.com/leaflet-geosearch@4.4.0/dist/geosearch.css")
+
+block scripts
+  script(src="/js/mapa.js" defer)

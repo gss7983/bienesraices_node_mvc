@@ -1,0 +1,30 @@
+extends ../layout/index
+
+block contenido
+  //- Pagina generica para mostrar mensajes importantes al usuario.
+  //- En este caso la usamos despues de crear una cuenta.
+  section(class="min-h-[calc(100vh-5rem)] grid place-items-center")
+    div(class="w-full max-w-3xl overflow-hidden rounded-2xl bg-white shadow-2xl shadow-gray-200 ring-1 ring-gray-100")
+      //- Encabezado visual con el mismo estilo de marca usado en auth.
+      div(class="bg-gradient-to-br from-emerald-700 via-teal-700 to-slate-900 px-6 py-10 text-center text-white sm:px-10")
+        a(class="inline-block border-b border-emerald-200/40 pb-1 text-2xl uppercase tracking-wide text-white" href="/auth/login")
+          strong(class="font-extrabold") Bienes
+          span(class="font-normal") Raices
+
+        h1(class="mx-auto mt-6 max-w-xl text-3xl font-black leading-tight sm:text-4xl")= pagina
+        p(class="mx-auto mt-4 max-w-xl text-sm leading-6 text-emerald-50 sm:text-base")= mensaje
+
+      //- Contenido principal del mensaje.
+      div(class="px-6 py-10 text-center sm:px-10")
+        div(class="mx-auto grid h-16 w-16 place-items-center rounded-full bg-emerald-100 text-3xl font-black text-emerald-700") ✓
+
+        p(class="mx-auto mt-6 max-w-lg text-sm leading-6 text-slate-500")
+          | Este enlace es temporal. Mas adelante lo enviaremos por email para completar la confirmacion de la cuenta.
+
+        //- Si el controlador envia un enlace, mostramos el boton principal.
+        if enlace
+          a(class="mt-8 inline-flex w-full items-center justify-center rounded-lg bg-emerald-700 px-5 py-3 text-sm font-black uppercase tracking-wide text-white transition hover:bg-emerald-800 focus:outline-none focus:ring-4 focus:ring-emerald-200 sm:w-auto" href=enlace)= textoEnlace || "Continuar"
+
+        nav(class="mt-6 flex flex-col gap-2 text-sm text-slate-600 sm:flex-row sm:items-center sm:justify-center")
+          a(class="font-semibold text-emerald-700 transition hover:text-emerald-900" href="/auth/login") Ir a iniciar sesion
+          a(class="font-semibold text-slate-500 transition hover:text-slate-900 sm:ml-4" href="/auth/registro") Crear otra cuenta

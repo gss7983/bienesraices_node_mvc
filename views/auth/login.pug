@@ -1,0 +1,53 @@
+extends ../layout/index
+
+block contenido
+  //- Contenedor principal de la pagina de login.
+  //- Mantiene el mismo estilo visual del registro para que la app sea consistente.
+  section(class="min-h-[calc(100vh-5rem)] grid place-items-center")
+    div(class="w-full max-w-5xl overflow-hidden rounded-2xl bg-white shadow-2xl shadow-gray-200 ring-1 ring-gray-100 lg:grid lg:grid-cols-2")
+      //- Panel visual izquierdo: da contexto y refuerza la identidad de la aplicacion.
+      div(class="hidden bg-gradient-to-br from-slate-900 via-teal-800 to-emerald-700 p-10 text-white lg:flex lg:flex-col lg:justify-between")
+        div
+          //- Logo tipografico: "Bienes" fuerte y "Raices" ligero, sin espacio entre palabras.
+          a(class="inline-block border-b border-emerald-200/40 pb-1 text-2xl uppercase tracking-wide text-white" href="/")
+            strong(class="font-extrabold") Bienes
+            span(class="font-normal") Raices
+          h1(class="mt-6 text-4xl font-black leading-tight") Administra tus propiedades desde un solo lugar.
+          p(class="mt-5 max-w-md text-base leading-7 text-emerald-50") Inicia sesion para continuar con tus publicaciones, favoritos y herramientas de administracion.
+
+        div(class="rounded-2xl bg-white/10 p-5 backdrop-blur")
+          p(class="text-sm font-semibold uppercase tracking-wide text-emerald-100") Panel privado
+          p(class="mt-3 text-2xl font-black") Acceso seguro para usuarios registrados.
+          p(class="mt-3 text-sm leading-6 text-emerald-50") Tus datos y propiedades se mantienen organizados dentro de tu cuenta.
+
+      //- Panel derecho: formulario para iniciar sesion.
+      div(class="px-6 py-10 sm:px-10 lg:px-12")
+        div(class="mx-auto w-full max-w-md")
+          p(class="text-sm font-semibold uppercase tracking-[0.25em] text-emerald-700") Bienvenido
+          h2(class="mt-3 text-3xl font-black text-slate-900")= pagina
+          p(class="mt-3 text-sm leading-6 text-slate-500") Ingresa tus datos para acceder a tu cuenta.
+
+          //- Mostramos errores de validacion o autenticacion enviados desde el controlador.
+          if errores && errores.length
+            div(class="mt-6 space-y-2")
+              each error in errores
+                p(class="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm font-bold text-red-700")= error.msg
+
+          form(class="mt-8 space-y-5" method="POST" action="/auth/login" novalidate)
+            input(type="hidden" name="_csrf" value=csrfToken)
+            div
+              label(class="mb-2 block text-sm font-bold text-slate-700" for="email") Correo electronico
+              input#email(class="w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-emerald-600 focus:ring-4 focus:ring-emerald-100" type="email" name="email" placeholder="tu@email.com" value=usuario ? usuario.email : "")
+
+            div
+              div(class="mb-2 flex items-center justify-between gap-4")
+                label(class="block text-sm font-bold text-slate-700" for="password") Password
+                a(class="inline-flex items-center justify-center rounded-full border border-emerald-700 px-3 py-1.5 text-xs font-bold text-emerald-700 transition hover:bg-emerald-50 hover:text-emerald-800 focus:outline-none focus:ring-4 focus:ring-emerald-100" href="/auth/olvide-password") Olvide mi password
+              input#password(class="w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-emerald-600 focus:ring-4 focus:ring-emerald-100" type="password" name="password" placeholder="Tu Password")
+
+            input(class="w-full cursor-pointer rounded-full bg-emerald-700 px-6 py-3 text-sm font-black uppercase tracking-wide text-white shadow-sm transition hover:bg-emerald-800 hover:shadow-md focus:outline-none focus:ring-4 focus:ring-emerald-200" type="submit" value="Iniciar Sesion")
+
+          nav(class="mt-6 flex flex-col items-center justify-center gap-3 text-sm text-slate-600 sm:flex-row")
+            | No tienes cuenta?
+            a(class="inline-flex items-center justify-center rounded-full border border-emerald-700 px-4 py-2 font-bold text-emerald-700 transition hover:bg-emerald-50 hover:text-emerald-800 focus:outline-none focus:ring-4 focus:ring-emerald-100" href="/auth/registro") Crear cuenta
+            a(class="font-bold text-slate-500 transition hover:text-emerald-700 focus:outline-none focus:underline" href="/") Volver al inicio

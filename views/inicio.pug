@@ -1,0 +1,121 @@
+extends ./layout/app
+
+//- Importa la tarjeta compartida por los distintos tipos de propiedad.
+include ./propiedades/partials/card
+
+block contenido
+  //- Introduccion breve de la pagina publica.
+  section(class="border-b border-slate-200 pb-8")
+    p(class="text-sm font-bold uppercase text-emerald-700") Propiedades en venta
+    h1(class="mt-2 max-w-4xl text-3xl font-extrabold text-slate-900 sm:text-4xl lg:text-5xl") Encuentra una propiedad para tu siguiente etapa
+    p(class="mt-4 max-w-2xl text-sm leading-7 text-slate-600 sm:text-base") Explora inmuebles organizados por categoría y consulta la información de cada publicación.
+
+  //- Primera division del inicio: categorias disponibles.
+  //- En la siguiente fase cada enlace mostrara sus propiedades correspondientes.
+  section(class="py-8 sm:py-10" aria-labelledby="categorias-inicio")
+    div(class="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between")
+      div
+        p(class="text-sm font-bold text-emerald-700") Explorar
+        h2#categorias-inicio(class="mt-1 text-2xl font-extrabold text-slate-900 sm:text-3xl") Categorías
+      p(class="text-sm text-slate-500") Selecciona el tipo de propiedad que buscas.
+
+    if error
+      div(class="mt-6 rounded-lg border border-red-200 bg-red-50 px-4 py-3" role="alert")
+        p(class="text-sm font-semibold text-red-700")= error
+
+    if categorias && categorias.length
+      ul(class="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3")
+        each categoria in categorias
+          li
+            a(
+              class="flex min-h-20 items-center justify-between rounded-lg border border-slate-200 bg-white px-5 py-4 text-slate-900 shadow-sm transition hover:border-emerald-400 hover:bg-emerald-50 hover:text-emerald-800 focus:outline-none focus:ring-4 focus:ring-emerald-100"
+              href=`/categorias/${categoria.id}`
+            )
+              span(class="min-w-0 break-words text-base font-bold")= categoria.nombre
+              span(class="ml-4 shrink-0 text-xl text-emerald-700" aria-hidden="true") →
+    else if !error
+      p(class="mt-6 rounded-lg border border-dashed border-slate-300 bg-white px-5 py-8 text-center text-sm font-semibold text-slate-500") No hay categorías disponibles.
+
+  //- Mapa principal de propiedades.
+  //- En esta etapa solamente mostramos el mapa; los pines se agregaran despues.
+  section(class="border-t border-slate-200 py-8 sm:py-10" aria-labelledby="titulo-mapa")
+    div(class="mb-5")
+      p(class="text-sm font-bold text-emerald-700") Explora la zona
+      h2#titulo-mapa(class="mt-1 text-2xl font-extrabold text-slate-900 sm:text-3xl") Ubicación de propiedades
+      p(class="mt-2 max-w-2xl text-sm leading-6 text-slate-600") Consulta las zonas donde se encuentran las propiedades disponibles.
+
+    //- Los identificadores se conservaran para leer las selecciones desde
+    //- mapaInicio.js en la siguiente etapa del curso.
+    div(class="mb-6 rounded-lg border border-slate-200 bg-white p-4 shadow-sm sm:p-5")
+      div(class="flex flex-col gap-1 border-b border-slate-200 pb-4 sm:flex-row sm:items-center sm:justify-between")
+        h3(class="text-lg font-extrabold text-slate-900") Filtrar propiedades
+        p(class="text-sm text-slate-500") Refina los marcadores visibles en el mapa.
+
+      div(class="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2")
+        div
+          label(for="categorias" class="mb-2 block text-sm font-bold text-slate-700") Categoría
+          select(
+            id="categorias"
+            name="categoria"
+            class="min-h-12 w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-emerald-600 focus:ring-4 focus:ring-emerald-100"
+          )
+            option(value="") Todas las categorías
+            if categorias && categorias.length
+              each categoria in categorias
+                option(value=categoria.id)= categoria.nombre
+
+        div
+          label(for="precios" class="mb-2 block text-sm font-bold text-slate-700") Precio
+          select(
+            id="precios"
+            name="precio"
+            class="min-h-12 w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-emerald-600 focus:ring-4 focus:ring-emerald-100"
+          )
+            option(value="") Todos los precios
+            if precios && precios.length
+              each precio in precios
+                option(value=precio.id)= precio.precio
+
+    //- La altura se define en tailwind.css para que Leaflet siempre reciba
+    //- dimensiones reales antes de inicializarse.
+    div#mapa-inicio(
+      class="w-full overflow-hidden rounded-lg border border-slate-200 bg-slate-200 shadow-sm"
+      aria-label="Mapa de propiedades disponibles"
+    )
+
+  //- Casas publicadas recientemente.
+  section(class="border-t border-slate-200 py-8 sm:py-10" aria-labelledby="casas-venta")
+    div(class="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between")
+      div
+        p(class="text-sm font-bold text-emerald-700") Recién publicadas
+        h2#casas-venta(class="mt-1 text-2xl font-extrabold text-slate-900 sm:text-3xl") Casas en venta
+      p(class="max-w-xl text-sm leading-6 text-slate-500") Conoce las casas más recientes disponibles en la plataforma.
+
+    if casas && casas.length
+      div(class="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3")
+        each casa in casas
+          +cardPropiedad(casa, "casas-venta")
+    else
+      p(class="mt-6 rounded-lg border border-dashed border-slate-300 bg-white px-5 py-10 text-center text-sm font-semibold text-slate-500") No hay casas publicadas en este momento.
+
+  //- Departamentos publicados recientemente.
+  section(class="border-t border-slate-200 py-8 sm:py-10" aria-labelledby="departamentos-venta")
+    div(class="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between")
+      div
+        p(class="text-sm font-bold text-emerald-700") Nuevas oportunidades
+        h2#departamentos-venta(class="mt-1 text-2xl font-extrabold text-slate-900 sm:text-3xl") Departamentos en venta
+      p(class="max-w-xl text-sm leading-6 text-slate-500") Explora los departamentos publicados recientemente y consulta todos sus detalles.
+
+    if departamentos && departamentos.length
+      div(class="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3")
+        each departamento in departamentos
+          +cardPropiedad(departamento, "departamentos-venta")
+    else
+      p(class="mt-6 rounded-lg border border-dashed border-slate-300 bg-white px-5 py-10 text-center text-sm font-semibold text-slate-500") No hay departamentos publicados en este momento.
+
+block styles
+  //- Hoja oficial servida localmente para evitar bloqueos o fallos del CDN.
+  link(rel="stylesheet" href="/css/leaflet.css")
+
+block scripts
+  script(src="/js/mapaInicio.js" defer)

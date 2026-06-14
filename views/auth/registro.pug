@@ -1,0 +1,66 @@
+extends ../layout/index
+
+block contenido
+  //- Contenedor principal de la pagina de registro.
+  //- Usamos una tarjeta amplia y responsiva para lograr una presentacion moderna.
+  section(class="min-h-[calc(100vh-5rem)] grid place-items-center")
+    div(class="w-full max-w-5xl overflow-hidden rounded-2xl bg-white shadow-2xl shadow-gray-200 ring-1 ring-gray-100 lg:grid lg:grid-cols-2")
+      //- Panel visual izquierdo: funciona como introduccion de marca.
+      div(class="hidden bg-gradient-to-br from-emerald-700 via-teal-700 to-slate-900 p-10 text-white lg:flex lg:flex-col lg:justify-between")
+        div
+          //- Logo tipografico: "Bienes" fuerte y "Raices" ligero, sin espacio entre palabras.
+          a(class="inline-block border-b border-emerald-200/40 pb-1 text-2xl uppercase tracking-wide text-white" href="/")
+            strong(class="font-extrabold") Bienes
+            span(class="font-normal") Raices
+          h1(class="mt-6 text-4xl font-black leading-tight") Encuentra el lugar ideal para vivir.
+          p(class="mt-5 max-w-md text-base leading-7 text-emerald-50") Crea tu cuenta para publicar, guardar y administrar propiedades desde una experiencia simple y profesional.
+
+        div(class="grid grid-cols-3 gap-4 text-center")
+          div(class="rounded-xl bg-white/10 p-4 backdrop-blur")
+            p(class="text-2xl font-black") +120
+            p(class="mt-1 text-xs uppercase tracking-wide text-emerald-100") Propiedades
+          div(class="rounded-xl bg-white/10 p-4 backdrop-blur")
+            p(class="text-2xl font-black") 24/7
+            p(class="mt-1 text-xs uppercase tracking-wide text-emerald-100") Acceso
+          div(class="rounded-xl bg-white/10 p-4 backdrop-blur")
+            p(class="text-2xl font-black") 100%
+            p(class="mt-1 text-xs uppercase tracking-wide text-emerald-100") Control
+
+      //- Panel derecho: formulario de registro.
+      div(class="px-6 py-10 sm:px-10 lg:px-12")
+        div(class="mx-auto w-full max-w-md")
+          p(class="text-sm font-semibold uppercase tracking-[0.25em] text-emerald-700") Crear cuenta
+          h2(class="mt-3 text-3xl font-black text-slate-900")= pagina
+          p(class="mt-3 text-sm leading-6 text-slate-500") Completa tus datos para comenzar a gestionar tus propiedades.
+
+          //- Mostramos errores de validacion enviados desde el controlador.
+          //- Si no existen errores, este bloque no se renderiza.
+          if errores && errores.length
+            div(class="mt-6 space-y-2")
+              each error in errores
+                p(class="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm font-bold text-red-700")= error.msg
+
+          form(class="mt-8 space-y-5" method="POST" action="/auth/registro" noValidate)
+            input(type="hidden" name="_csrf" value= csrfToken)
+            div
+              label(class="mb-2 block text-sm font-bold text-slate-700" for="nombre") Nombre completo
+              input#nombre(class="w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-emerald-600 focus:ring-4 focus:ring-emerald-100" type="text" name="nombre" placeholder="Tu Nombre" value=usuario ? usuario.nombre : "")
+
+            div
+              label(class="mb-2 block text-sm font-bold text-slate-700" for="email") Correo electronico
+              input#email(class="w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-emerald-600 focus:ring-4 focus:ring-emerald-100" type="email" name="email" placeholder="tu@email.com" value=usuario ? usuario.email : "")
+
+            div
+              label(class="mb-2 block text-sm font-bold text-slate-700" for="password") Password
+              input#password(class="w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-emerald-600 focus:ring-4 focus:ring-emerald-100" type="password" name="password" placeholder="Tu Password")
+
+            div
+              label(class="mb-2 block text-sm font-bold text-slate-700" for="repetir_password") Repetir password
+              input#repetir_password(class="w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-emerald-600 focus:ring-4 focus:ring-emerald-100" type="password" name="repetir_password" placeholder="Repite tu Password")
+
+            input(class="w-full cursor-pointer rounded-full bg-emerald-700 px-6 py-3 text-sm font-black uppercase tracking-wide text-white shadow-sm transition hover:bg-emerald-800 hover:shadow-md focus:outline-none focus:ring-4 focus:ring-emerald-200" type="submit" value="Crear Cuenta")
+
+          nav(class="mt-6 flex flex-col gap-3 text-sm sm:flex-row sm:items-center sm:justify-between")
+            a(class="inline-flex items-center justify-center rounded-full border border-emerald-700 px-4 py-2 font-bold text-emerald-700 transition hover:bg-emerald-50 hover:text-emerald-800 focus:outline-none focus:ring-4 focus:ring-emerald-100" href="/auth/login") Ya tengo cuenta
+            a(class="inline-flex items-center justify-center rounded-full border border-emerald-700 px-4 py-2 font-bold text-emerald-700 transition hover:bg-emerald-50 hover:text-emerald-800 focus:outline-none focus:ring-4 focus:ring-emerald-100" href="/auth/olvide-password") Olvide mi password
+          a(class="mt-5 block text-center text-sm font-bold text-slate-500 transition hover:text-emerald-700 focus:outline-none focus:underline" href="/") Volver al inicio

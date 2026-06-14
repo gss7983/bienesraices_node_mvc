@@ -1,0 +1,55 @@
+{
+  "name": "bienesraices_mvc",
+  "version": "1.0.0",
+  "description": "Bienes Raices",
+  "keywords": [
+    "MVC",
+    "Pug",
+    "Tailwind",
+    "MySQL",
+    "Sequelize"
+  ],
+  "license": "ISC",
+  "author": "G_Salgado_S",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "server": "nodemon index.js",
+    "css": "tailwindcss -i ./public/css/tailwind.css -o ./public/css/app.css --watch",
+    "js": "webpack --watch",
+    "dev": "concurrently -n CSS,JS -c green,blue \"npm run css\" \"npm run js\"",
+    "db:importar": "node ./seed/seeder.js -i",
+    "db:eliminar": "node ./seed/seeder.js -e",
+    "db:migrar-mensajes": "node ./migrations/agregar-leido-mensajes.js"
+  },
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "cookie-parser": "^1.4.7",
+    "csurf": "^1.11.0",
+    "dotenv": "^17.4.2",
+    "dropzone": "^5.9.3",
+    "express": "^5.2.1",
+    "express-validator": "^7.3.2",
+    "jsonwebtoken": "^9.0.3",
+    "leaflet": "^1.9.4",
+    "leaflet-geosearch": "^4.4.0",
+    "multer": "^2.1.1",
+    "mysql2": "^3.22.4",
+    "nodemailer": "^8.0.10",
+    "pug": "^3.0.4",
+    "sequelize": "^6.37.8"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.3.0",
+    "@tailwindcss/postcss": "^4.3.0",
+    "autoprefixer": "^10.5.0",
+    "concurrently": "^10.0.3",
+    "nodemon": "^3.1.14",
+    "postcss": "^8.5.15",
+    "postcss-cli": "^11.0.1",
+    "tailwindcss": "^4.3.0",
+    "webpack": "^5.107.2",
+    "webpack-cli": "^7.0.3"
+  }
+}

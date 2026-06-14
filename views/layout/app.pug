@@ -1,0 +1,23 @@
+doctype html
+html(lang="es")
+  head
+    meta(charset="UTF-8")
+    meta(http-equiv="X-UA-Compatible", content="ie=edge")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title BienesRaices | #{pagina}
+    //- Los estilos de librerias se cargan primero.
+    //- app.css queda despues para permitir que Tailwind personalice sus componentes.
+    block styles
+    link(rel="stylesheet", href="/css/app.css")
+  body(class="flex min-h-screen flex-col bg-slate-50 text-slate-900 antialiased")
+    include includes/header-app
+
+    //- Contenedor principal para las paginas publicas de la aplicacion.
+    main(class="mx-auto w-full max-w-7xl flex-1 px-4 py-10 sm:px-6 lg:px-8")
+      block contenido
+
+    //- El layout permite ocultar el footer cuando una vista lo necesite.
+    unless sinFooter
+      include footer
+
+    block scripts

@@ -1,0 +1,11 @@
+//- Footer global de la aplicacion.
+//- Se incluye desde layout/index.pug para mantener todas las vistas consistentes.
+footer(class="border-t border-emerald-100 bg-white/95 shadow-[0_-10px_30px_rgba(16,185,129,0.08)]")
+  div(class="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-6 text-center sm:px-6 md:flex-row md:items-center md:justify-between md:text-left lg:px-8")
+    div
+      a(class="inline-block text-xl uppercase tracking-wide text-slate-900" href="/auth/login")
+        strong(class="font-extrabold") Bienes
+        span(class="font-normal text-emerald-700") Raices
+      p(class="mt-2 text-sm text-slate-500") Plataforma para administrar y publicar propiedades.
+
+    p(class="text-xs font-semibold uppercase tracking-wide text-slate-400") &copy; #{new Date().getFullYear()} BienesRaices

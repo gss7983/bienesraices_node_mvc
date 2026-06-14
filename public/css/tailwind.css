@@ -1,0 +1,52 @@
+/* 
+  Archivo principal de Tailwind CSS.
+
+  Este archivo funciona como entrada para PostCSS/Tailwind.
+  Aqui no escribimos todo el CSS final manualmente; Tailwind procesa estas
+  instrucciones y genera el CSS necesario para la aplicacion.
+*/
+
+/*
+  Tailwind CSS v4 usa @import en lugar de las directivas antiguas:
+  @tailwind base;
+  @tailwind components;
+  @tailwind utilities;
+
+  Con esta sola linea importamos:
+  - Preflight: los estilos base de Tailwind.
+  - Theme: las variables y configuracion del tema.
+  - Utilities: clases como text-center, p-4, flex, grid, etc.
+*/
+@import "tailwindcss";
+
+/*
+  @source:
+  Indica a Tailwind v4 donde buscar clases utilitarias.
+  Como estamos usando Pug, agregamos la carpeta views para que las clases
+  escritas en los archivos .pug se incluyan en el CSS final.
+*/
+@source "../../views";
+
+/*
+  Tailwind aplica max-width: 100% a todas las imagenes. Leaflet posiciona cada
+  mosaico del mapa con dimensiones propias, por lo que necesita eliminar ese
+  limite para evitar zonas grises o mapas mostrados parcialmente.
+*/
+@layer components {
+  #mapa-inicio {
+    width: 100%;
+    height: 38rem;
+    position: relative;
+    z-index: 0;
+  }
+
+  .leaflet-container img {
+    max-width: none !important;
+  }
+
+  @media (max-width: 640px) {
+    #mapa-inicio {
+      height: 28rem;
+    }
+  }
+}
